@@ -61,9 +61,37 @@ type Resume struct {
 	UpdatedAt  time.Time `json:"updatedAt"`
 }
 
+// UserProfile represents user profile data for cover letter generation
+type UserProfile struct {
+	Projects          []ProjectInfo
+	Posts             []PostInfo
+	TechnicalWritings []TechnicalWritingInfo
+	Skills            []string
+	Interests         []string
+	Certifications    []string
+}
+
+// ProjectInfo represents project information
+type ProjectInfo struct{}
+
+// PostInfo represents post information
+type PostInfo struct{}
+
+// TechnicalWritingInfo represents technical writing information
+type TechnicalWritingInfo struct{}
+
+// JobInfo represents job information for cover letter generation
+type JobInfo struct {
+	CompanyName    string
+	JobTitle       string
+	JobDescription string
+	Location       string
+	Requirements   []string
+}
+
 // CoverLetterGenerator is an interface for generating cover letters.
 type CoverLetterGenerator interface {
-	GenerateCoverLetterWithContext(ctx context.Context, profile aiservice.UserProfile, job aiservice.JobInfo, additionalContext string) (string, error)
+	GenerateCoverLetterWithContext(ctx context.Context, profile UserProfile, job JobInfo, additionalContext string) (string, error)
 }
 
 // Handler exposes job application endpoints.

@@ -91,7 +91,7 @@ func NewHandlerWithJobApplicationService(service Service, jobApplicationService 
 
 // CreateResume creates a new resume.
 func (h *handler) CreateResume(c *fiber.Ctx) error {
-	userID, err := authdomain.UserIDFromContext(c)
+	userID, err := middleware.GetUserIDFromFiberContext(c)
 	if err != nil {
 		return response.Error(c, fiber.StatusUnauthorized, 0, fiber.Map{"message": "authentication required"})
 	}
@@ -121,7 +121,7 @@ func (h *handler) CreateResume(c *fiber.Ctx) error {
 
 // UploadResume handles file upload and creates a new resume.
 func (h *handler) UploadResume(c *fiber.Ctx) error {
-	userID, err := authdomain.UserIDFromContext(c)
+	userID, err := middleware.GetUserIDFromFiberContext(c)
 	if err != nil {
 		return response.Error(c, fiber.StatusUnauthorized, 0, fiber.Map{"message": "authentication required"})
 	}
@@ -208,7 +208,7 @@ func (h *handler) UploadResume(c *fiber.Ctx) error {
 
 // UpdateResume updates an existing resume.
 func (h *handler) UpdateResume(c *fiber.Ctx) error {
-	userID, err := authdomain.UserIDFromContext(c)
+	userID, err := middleware.GetUserIDFromFiberContext(c)
 	if err != nil {
 		return response.Error(c, fiber.StatusUnauthorized, 0, fiber.Map{"message": "authentication required"})
 	}
@@ -251,7 +251,7 @@ func (h *handler) UpdateResume(c *fiber.Ctx) error {
 
 // DeleteResume deletes a resume.
 func (h *handler) DeleteResume(c *fiber.Ctx) error {
-	userID, err := authdomain.UserIDFromContext(c)
+	userID, err := middleware.GetUserIDFromFiberContext(c)
 	if err != nil {
 		return response.Error(c, fiber.StatusUnauthorized, 0, fiber.Map{"message": "authentication required"})
 	}
@@ -305,7 +305,7 @@ func (h *handler) DeleteResume(c *fiber.Ctx) error {
 
 // GetResume retrieves a resume by ID.
 func (h *handler) GetResume(c *fiber.Ctx) error {
-	userID, err := authdomain.UserIDFromContext(c)
+	userID, err := middleware.GetUserIDFromFiberContext(c)
 	if err != nil {
 		return response.Error(c, fiber.StatusUnauthorized, 0, fiber.Map{"message": "authentication required"})
 	}
@@ -332,7 +332,7 @@ func (h *handler) GetResume(c *fiber.Ctx) error {
 
 // ListResumes lists all resumes for the authenticated user, optionally filtered by tags.
 func (h *handler) ListResumes(c *fiber.Ctx) error {
-	userID, err := authdomain.UserIDFromContext(c)
+	userID, err := middleware.GetUserIDFromFiberContext(c)
 	if err != nil {
 		return response.Error(c, fiber.StatusUnauthorized, 0, fiber.Map{"message": "authentication required"})
 	}
@@ -378,7 +378,7 @@ func (h *handler) ListResumes(c *fiber.Ctx) error {
 
 // ListResumeTags returns all unique tags from all resumes for the authenticated user (for autocomplete).
 func (h *handler) ListResumeTags(c *fiber.Ctx) error {
-	userID, err := authdomain.UserIDFromContext(c)
+	userID, err := middleware.GetUserIDFromFiberContext(c)
 	if err != nil {
 		return response.Error(c, fiber.StatusUnauthorized, 0, fiber.Map{"message": "authentication required"})
 	}
@@ -410,7 +410,7 @@ func (h *handler) ListResumeTags(c *fiber.Ctx) error {
 
 // MarkAsMain marks a resume as main.
 func (h *handler) MarkAsMain(c *fiber.Ctx) error {
-	userID, err := authdomain.UserIDFromContext(c)
+	userID, err := middleware.GetUserIDFromFiberContext(c)
 	if err != nil {
 		return response.Error(c, fiber.StatusUnauthorized, 0, fiber.Map{"message": "authentication required"})
 	}
@@ -437,7 +437,7 @@ func (h *handler) MarkAsMain(c *fiber.Ctx) error {
 
 // MarkAsFeatured marks a resume as featured.
 func (h *handler) MarkAsFeatured(c *fiber.Ctx) error {
-	userID, err := authdomain.UserIDFromContext(c)
+	userID, err := middleware.GetUserIDFromFiberContext(c)
 	if err != nil {
 		return response.Error(c, fiber.StatusUnauthorized, 0, fiber.Map{"message": "authentication required"})
 	}
@@ -464,7 +464,7 @@ func (h *handler) MarkAsFeatured(c *fiber.Ctx) error {
 
 // UnmarkAsMain removes the main flag from a resume.
 func (h *handler) UnmarkAsMain(c *fiber.Ctx) error {
-	userID, err := authdomain.UserIDFromContext(c)
+	userID, err := middleware.GetUserIDFromFiberContext(c)
 	if err != nil {
 		return response.Error(c, fiber.StatusUnauthorized, 0, fiber.Map{"message": "authentication required"})
 	}
@@ -491,7 +491,7 @@ func (h *handler) UnmarkAsMain(c *fiber.Ctx) error {
 
 // UnmarkAsFeatured removes the featured flag from a resume.
 func (h *handler) UnmarkAsFeatured(c *fiber.Ctx) error {
-	userID, err := authdomain.UserIDFromContext(c)
+	userID, err := middleware.GetUserIDFromFiberContext(c)
 	if err != nil {
 		return response.Error(c, fiber.StatusUnauthorized, 0, fiber.Map{"message": "authentication required"})
 	}
@@ -581,7 +581,7 @@ func (h *handler) DownloadResume(c *fiber.Ctx) error {
 
 // DownloadResumeByID downloads a resume by its ID (authenticated endpoint).
 func (h *handler) DownloadResumeByID(c *fiber.Ctx) error {
-	userID, err := authdomain.UserIDFromContext(c)
+	userID, err := middleware.GetUserIDFromFiberContext(c)
 	if err != nil {
 		return response.Error(c, fiber.StatusUnauthorized, 0, fiber.Map{"message": "authentication required"})
 	}
@@ -702,7 +702,7 @@ func (h *handler) PreviewResume(c *fiber.Ctx) error {
 
 // GenerateResume enqueues a resume generation job and returns immediately.
 func (h *handler) GenerateResume(c *fiber.Ctx) error {
-	userID, err := authdomain.UserIDFromContext(c)
+	userID, err := middleware.GetUserIDFromFiberContext(c)
 	if err != nil {
 		return response.Error(c, fiber.StatusUnauthorized, 0, fiber.Map{"message": "authentication required"})
 	}
@@ -787,7 +787,7 @@ func (h *handler) GenerateResume(c *fiber.Ctx) error {
 
 // RecalculateMetrics manually recalculates metrics for a resume.
 func (h *handler) RecalculateMetrics(c *fiber.Ctx) error {
-	userID, err := authdomain.UserIDFromContext(c)
+	userID, err := middleware.GetUserIDFromFiberContext(c)
 	if err != nil {
 		return response.Error(c, fiber.StatusUnauthorized, 0, fiber.Map{"message": "authentication required"})
 	}
@@ -825,7 +825,7 @@ func (h *handler) RecalculateMetrics(c *fiber.Ctx) error {
 
 // GetJobStatus returns the status of a resume generation job.
 func (h *handler) GetJobStatus(c *fiber.Ctx) error {
-	userID, err := authdomain.UserIDFromContext(c)
+	userID, err := middleware.GetUserIDFromFiberContext(c)
 	if err != nil {
 		return response.Error(c, fiber.StatusUnauthorized, 0, fiber.Map{"message": "authentication required"})
 	}
@@ -869,7 +869,7 @@ func (h *handler) GetJobStatus(c *fiber.Ctx) error {
 
 // RetryJob retries a failed resume generation job.
 func (h *handler) RetryJob(c *fiber.Ctx) error {
-	userID, err := authdomain.UserIDFromContext(c)
+	userID, err := middleware.GetUserIDFromFiberContext(c)
 	if err != nil {
 		return response.Error(c, fiber.StatusUnauthorized, 0, fiber.Map{"message": "authentication required"})
 	}
@@ -923,7 +923,7 @@ func (h *handler) RetryJob(c *fiber.Ctx) error {
 
 // CancelJob cancels a pending or processing job.
 func (h *handler) CancelJob(c *fiber.Ctx) error {
-	userID, err := authdomain.UserIDFromContext(c)
+	userID, err := middleware.GetUserIDFromFiberContext(c)
 	if err != nil {
 		return response.Error(c, fiber.StatusUnauthorized, 0, fiber.Map{"message": "authentication required"})
 	}

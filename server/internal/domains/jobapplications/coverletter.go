@@ -84,10 +84,10 @@ func (h *handler) GenerateCoverLetter(c *fiber.Ctx) error {
 	}
 
 	// Build user profile for cover letter generation
-	profile := aiservice.UserProfile{
-		Projects:          []aiservice.ProjectInfo{},
-		Posts:             []aiservice.PostInfo{},
-		TechnicalWritings: []aiservice.TechnicalWritingInfo{},
+	profile := UserProfile{
+		Projects:          []ProjectInfo{},
+		Posts:             []PostInfo{},
+		TechnicalWritings: []TechnicalWritingInfo{},
 		Skills:            []string{},
 		Interests:         []string{},
 		Certifications:    []string{},
@@ -98,7 +98,7 @@ func (h *handler) GenerateCoverLetter(c *fiber.Ctx) error {
 	// This is a placeholder - in production, you'd inject these services
 
 	// Build job info
-	jobInfo := aiservice.JobInfo{
+	jobInfo := JobInfo{
 		CompanyName:    application.CompanyName,
 		JobTitle:       application.JobTitle,
 		JobDescription: application.JobDescription,
