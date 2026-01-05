@@ -288,8 +288,8 @@ services:
       - "${JAEGER_UI_PORT:-16698}:16686"  # Jaeger UI
       - "${JAEGER_OTLP_GRPC_PORT:-4331}:4317"    # OTLP gRPC
       - "${JAEGER_OTLP_HTTP_PORT:-4332}:4318"    # OTLP HTTP
-      - "${JAEGER_AGENT_UDP_6831:-6843}:6831/udp"  # Jaeger agent (UDP)
-      - "${JAEGER_AGENT_UDP_6832:-6844}:6832/udp"  # Jaeger agent (UDP)
+      - "${JAEGER_AGENT_UDP_6831:-6845}:6831/udp"  # Jaeger agent (UDP)
+      - "${JAEGER_AGENT_UDP_6832:-6846}:6832/udp"  # Jaeger agent (UDP)
       - "${JAEGER_CONFIG_PORT:-5790}:5778"    # Config server
       - "${JAEGER_GRPC_PORT:-14262}:14250"  # Jaeger gRPC
       - "${JAEGER_HTTP_PORT:-14280}:14268"  # Jaeger HTTP
