@@ -286,8 +286,8 @@ services:
       COLLECTOR_ZIPKIN_HOST_PORT: ":9411"
     ports:
       - "${JAEGER_UI_PORT:-16698}:16686"  # Jaeger UI
-      - "${JAEGER_OTLP_GRPC_PORT:-4329}:4317"    # OTLP gRPC
-      - "${JAEGER_OTLP_HTTP_PORT:-4330}:4318"    # OTLP HTTP
+      - "${JAEGER_OTLP_GRPC_PORT:-4331}:4317"    # OTLP gRPC
+      - "${JAEGER_OTLP_HTTP_PORT:-4332}:4318"    # OTLP HTTP
       - "${JAEGER_AGENT_UDP_6831:-6843}:6831/udp"  # Jaeger agent (UDP)
       - "${JAEGER_AGENT_UDP_6832:-6844}:6832/udp"  # Jaeger agent (UDP)
       - "${JAEGER_CONFIG_PORT:-5790}:5778"    # Config server
