@@ -200,20 +200,7 @@ func (s *service) GetImpactMetric(ctx context.Context, metricID uuid.UUID, userI
 }
 
 func (s *service) ListImpactMetrics(ctx context.Context, filters ListImpactMetricsFilters) ([]ImpactMetric, error) {
-	repoFilters := ImpactMetricFilters{
-		UserID:      filters.UserID,
-		Type:        filters.Type,
-		EntityType:  filters.EntityType,
-		EntityID:    filters.EntityID,
-		Featured:    filters.Featured,
-		PeriodStart: filters.PeriodStart,
-		PeriodEnd:   filters.PeriodEnd,
-		Limit:       filters.Limit,
-		Offset:      filters.Offset,
-		OrderBy:     filters.OrderBy,
-		Order:       filters.Order,
-	}
-
+	repoFilters := ImpactMetricFilters(filters)
 	return s.repo.ListImpactMetrics(ctx, repoFilters)
 }
 

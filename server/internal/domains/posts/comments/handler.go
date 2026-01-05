@@ -104,7 +104,7 @@ func (h *handler) UpdateComment(c *fiber.Ctx) error {
 		return response.Error(c, fiber.StatusBadRequest, ErrCodeInvalidPayload, nil)
 	}
 
-	comment, err := h.service.UpdateComment(c.Context(), userID, commentID, UpdateCommentRequest{
+	comment, err := h.service.UpdateComment(c.Context(), userID, commentID, UpdateCommentRequest(payload))
 		Content: payload.Content,
 	})
 	if err != nil {

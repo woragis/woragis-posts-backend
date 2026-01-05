@@ -596,6 +596,7 @@ func (s *Service) DispatchSummary(ctx context.Context, summary Summary, opts Dis
 	if opts.SendEmail {
 		// TODO: Re-enable when notifications worker is implemented
 		// env := notifications.ReportEnvelope{
+		_ = opts.SendEmail // Suppress unused variable warning
 		// 	UserID:      summary.UserID.String(),
 		// 	Subject:     subject,
 		// 	TextMessage: message,

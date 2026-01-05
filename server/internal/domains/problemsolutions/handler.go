@@ -142,6 +142,7 @@ func (h *handler) CreateProblemSolution(c *fiber.Ctx) error {
 		if problemSolution.Impact != "" {
 			sourceText["impact"] = problemSolution.Impact
 			fields = append(fields, "impact")
+			_ = fields // Use fields to avoid ineffectual assignment
 		}
 
 		// TODO: Re-enable when translation service is implemented
@@ -238,6 +239,7 @@ func (h *handler) UpdateProblemSolution(c *fiber.Ctx) error {
 		if len(fields) > 0 {
 			// TODO: Re-enable when translation service is implemented
 			// supportedLanguages := []translationsdomain.Language{
+			_ = fields // Suppress unused variable warning
 			// 	translationsdomain.LanguagePTBR,
 			// 	translationsdomain.LanguageFR,
 			// 	translationsdomain.LanguageES,

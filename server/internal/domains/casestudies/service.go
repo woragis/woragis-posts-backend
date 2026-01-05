@@ -201,12 +201,7 @@ func (s *service) GetCaseStudyByProjectID(ctx context.Context, projectID uuid.UU
 }
 
 func (s *service) ListCaseStudies(ctx context.Context, filters ListCaseStudiesFilters) ([]CaseStudy, error) {
-	repoFilters := CaseStudyFilters{
-		UserID:      filters.UserID,
-		ProjectID:   filters.ProjectID,
-		ProjectSlug: filters.ProjectSlug,
-		Featured:    filters.Featured,
-		Limit:       filters.Limit,
+	repoFilters := CaseStudyFilters(filters)
 		Offset:      filters.Offset,
 		OrderBy:     filters.OrderBy,
 		Order:       filters.Order,

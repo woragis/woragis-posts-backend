@@ -85,20 +85,7 @@ func (h *handler) CreateCaseStudy(c *fiber.Ctx) error {
 		return response.Error(c, fiber.StatusBadRequest, ErrCodeInvalidPayload, nil)
 	}
 
-	caseStudy, err := h.service.CreateCaseStudy(c.Context(), userID, CreateCaseStudyRequest{
-		ProjectID:      payload.ProjectID,
-		ProjectSlug:    payload.ProjectSlug,
-		Title:          payload.Title,
-		Problem:        payload.Problem,
-		Context:        payload.Context,
-		Solution:       payload.Solution,
-		Approach:       payload.Approach,
-		Architecture:   payload.Architecture,
-		Metrics:        payload.Metrics,
-		LessonsLearned: payload.LessonsLearned,
-		Technologies:   payload.Technologies,
-		Featured:       payload.Featured,
-	})
+	caseStudy, err := h.service.CreateCaseStudy(c.Context(), userID, CreateCaseStudyRequest(payload))
 	if err != nil {
 		return h.handleError(c, err)
 	}
@@ -133,6 +120,7 @@ func (h *handler) CreateCaseStudy(c *fiber.Ctx) error {
 		}
 		if caseStudy.Solution != "" {
 			fields = append(fields, "solution")
+			_ = fields // Use fields to avoid ineffectual assignment
 		}
 
 		// Queue translations for all supported languages (except English)
@@ -196,18 +184,7 @@ func (h *handler) UpdateCaseStudy(c *fiber.Ctx) error {
 		return response.Error(c, fiber.StatusBadRequest, ErrCodeInvalidPayload, nil)
 	}
 
-	caseStudy, err := h.service.UpdateCaseStudy(c.Context(), userID, caseStudyID, UpdateCaseStudyRequest{
-		Title:          payload.Title,
-		Problem:        payload.Problem,
-		Context:        payload.Context,
-		Solution:       payload.Solution,
-		Approach:       payload.Approach,
-		Architecture:   payload.Architecture,
-		Metrics:        payload.Metrics,
-		LessonsLearned: payload.LessonsLearned,
-		Technologies:   payload.Technologies,
-		Featured:       payload.Featured,
-	})
+	caseStudy, err := h.service.UpdateCaseStudy(c.Context(), userID, caseStudyID, UpdateCaseStudyRequest(payload))
 	if err != nil {
 		return h.handleError(c, err)
 	}

@@ -40,14 +40,6 @@ func NewGormRepository(db *gorm.DB) Repository {
 	return &gormRepository{db: db}
 }
 
-// isUniqueConstraintError checks if the error is a unique constraint violation.
-func isUniqueConstraintError(err error) bool {
-	var pgErr *pgconn.PgError
-	if errors.As(err, &pgErr) {
-		return pgErr.Code == "23505" // unique_violation
-	}
-	return false
-}
 
 func (r *gormRepository) CreateComment(ctx context.Context, comment *Comment) error {
 	if err := comment.Validate(); err != nil {

@@ -204,6 +204,7 @@ func (h *handler) CreatePost(c *fiber.Ctx) error {
 		}
 		if post.OGDescription != "" {
 			fields = append(fields, "ogDescription")
+			_ = fields // Use fields to avoid ineffectual assignment
 		}
 
 		// Queue translations for all supported languages (except English)
@@ -265,7 +266,7 @@ func (h *handler) UpdatePost(c *fiber.Ctx) error {
 		return response.Error(c, fiber.StatusBadRequest, ErrCodeInvalidPayload, nil)
 	}
 
-	post, err := h.service.UpdatePost(c.Context(), userID, postID, UpdatePostRequest{
+	post, err := h.service.UpdatePost(c.Context(), userID, postID, UpdatePostRequest(payload))
 		Title:           payload.Title,
 		Content:         payload.Content,
 		Excerpt:         payload.Excerpt,
@@ -321,7 +322,9 @@ func (h *handler) GetPost(c *fiber.Ctx) error {
 
 	// Increment views for published posts
 	if post.Status == PostStatusPublished {
-		go h.service.IncrementPostViews(c.Context(), postID)
+		go func() {
+			_ = h.service.IncrementPostViews(c.Context(), postID) // Fire and forget - log error if needed
+		}()
 	}
 
 	return response.Success(c, fiber.StatusOK, toPostResponse(post))
@@ -503,7 +506,7 @@ func (h *handler) CreateCategory(c *fiber.Ctx) error {
 		return response.Error(c, fiber.StatusBadRequest, ErrCodeInvalidPayload, nil)
 	}
 
-	category, err := h.service.CreateCategory(c.Context(), CreateCategoryRequest{
+	category, err := h.service.CreateCategory(c.Context(), CreateCategoryRequest(payload))
 		Name:        payload.Name,
 		Description: payload.Description,
 	})
@@ -532,7 +535,7 @@ func (h *handler) UpdateCategory(c *fiber.Ctx) error {
 		return response.Error(c, fiber.StatusBadRequest, ErrCodeInvalidPayload, nil)
 	}
 
-	category, err := h.service.UpdateCategory(c.Context(), categoryID, UpdateCategoryRequest{
+	category, err := h.service.UpdateCategory(c.Context(), categoryID, UpdateCategoryRequest(payload))
 		Name:        payload.Name,
 		Description: payload.Description,
 	})

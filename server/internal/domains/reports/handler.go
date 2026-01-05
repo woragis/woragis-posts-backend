@@ -151,13 +151,7 @@ func (h *Handler) PostSummary(c *fiber.Ctx) error {
 		return h.handleError(c, err)
 	}
 
-	opts := DispatchOptions{
-		SendEmail:    payload.SendEmail,
-		EmailAddress: payload.EmailAddress,
-		SendWhatsApp: payload.SendWhatsApp,
-		PhoneNumber:  payload.PhoneNumber,
-		AgentAlias:   payload.AgentAlias,
-	}
+	opts := DispatchOptions(payload)
 
 	if err := h.service.DispatchSummary(c.Context(), summary, opts); err != nil {
 		return h.handleError(c, err)
