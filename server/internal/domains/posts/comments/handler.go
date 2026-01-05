@@ -105,8 +105,6 @@ func (h *handler) UpdateComment(c *fiber.Ctx) error {
 	}
 
 	comment, err := h.service.UpdateComment(c.Context(), userID, commentID, UpdateCommentRequest(payload))
-		Content: payload.Content,
-	})
 	if err != nil {
 		return h.handleError(c, err)
 	}

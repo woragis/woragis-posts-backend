@@ -267,22 +267,6 @@ func (h *handler) UpdatePost(c *fiber.Ctx) error {
 	}
 
 	post, err := h.service.UpdatePost(c.Context(), userID, postID, UpdatePostRequest(payload))
-		Title:           payload.Title,
-		Content:         payload.Content,
-		Excerpt:         payload.Excerpt,
-		Status:          payload.Status,
-		FeaturedImage:   payload.FeaturedImage,
-		MetaTitle:       payload.MetaTitle,
-		MetaDescription: payload.MetaDescription,
-		MetaKeywords:    payload.MetaKeywords,
-		OGTitle:         payload.OGTitle,
-		OGDescription:   payload.OGDescription,
-		OGImage:         payload.OGImage,
-		Featured:        payload.Featured,
-		SkillIDs:        payload.SkillIDs,
-		CategoryIDs:     payload.CategoryIDs,
-		TagNames:        payload.TagNames,
-	})
 	if err != nil {
 		return h.handleError(c, err)
 	}
@@ -507,9 +491,6 @@ func (h *handler) CreateCategory(c *fiber.Ctx) error {
 	}
 
 	category, err := h.service.CreateCategory(c.Context(), CreateCategoryRequest(payload))
-		Name:        payload.Name,
-		Description: payload.Description,
-	})
 	if err != nil {
 		return h.handleError(c, err)
 	}
@@ -536,9 +517,6 @@ func (h *handler) UpdateCategory(c *fiber.Ctx) error {
 	}
 
 	category, err := h.service.UpdateCategory(c.Context(), categoryID, UpdateCategoryRequest(payload))
-		Name:        payload.Name,
-		Description: payload.Description,
-	})
 	if err != nil {
 		return h.handleError(c, err)
 	}

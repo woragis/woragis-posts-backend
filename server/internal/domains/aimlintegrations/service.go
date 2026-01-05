@@ -279,11 +279,6 @@ func (s *service) GetAIMLIntegrationPublic(ctx context.Context, integrationID uu
 
 func (s *service) ListAIMLIntegrations(ctx context.Context, filters ListAIMLIntegrationFilters) ([]AIMLIntegration, error) {
 	repoFilters := AIMLIntegrationFilters(filters)
-		Offset:    filters.Offset,
-		OrderBy:   filters.OrderBy,
-		Order:     filters.Order,
-	}
-
 	return s.repo.ListAIMLIntegrations(ctx, repoFilters)
 }
 

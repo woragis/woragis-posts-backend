@@ -202,11 +202,6 @@ func (s *service) GetCaseStudyByProjectID(ctx context.Context, projectID uuid.UU
 
 func (s *service) ListCaseStudies(ctx context.Context, filters ListCaseStudiesFilters) ([]CaseStudy, error) {
 	repoFilters := CaseStudyFilters(filters)
-		Offset:      filters.Offset,
-		OrderBy:     filters.OrderBy,
-		Order:       filters.Order,
-	}
-
 	return s.repo.ListCaseStudies(ctx, repoFilters)
 }
 
