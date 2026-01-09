@@ -425,7 +425,7 @@ jobs:
           file: ./server/Dockerfile
           push: false
           load: true
-          tags: auth-service:test
+          tags: posts-service:test
           cache-from: type=gha
           cache-to: type=gha,mode=max
 
