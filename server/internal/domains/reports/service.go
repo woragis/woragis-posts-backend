@@ -9,7 +9,6 @@ import (
 
 	"github.com/google/uuid"
 	"gorm.io/datatypes"
-
 	// TODO: Re-enable when these services are implemented
 	// chatsdomain "woragis-posts-service/internal/domains/chats"
 	// financesdomain "woragis-posts-service/internal/domains/finances"
