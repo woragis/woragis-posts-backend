@@ -231,14 +231,7 @@ func (h *handler) GetImpactMetric(c *fiber.Ctx) error {
 	}
 
 	// Apply translations if enricher is available
-	if h.enricher != nil {
-		// TODO: Re-enable when translation service is implemented
-		// language := translationsdomain.LanguageFromContext(c)
-		// fieldMap := map[string]*string{
-		// 	"description": &metric.Description,
-		// }
-		// _ = h.enricher.EnrichEntityFields(c.Context(), translationsdomain.EntityTypeImpactMetric, metric.ID, language, fieldMap)
-	}
+	_ = h.enricher // TODO: Re-enable when translation service is implemented
 
 	return response.Success(c, fiber.StatusOK, metric)
 }

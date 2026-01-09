@@ -309,17 +309,7 @@ func (s *service) GetTechnicalWritingPublic(ctx context.Context, writingID uuid.
 }
 
 func (s *service) ListTechnicalWritings(ctx context.Context, filters ListTechnicalWritingFilters) ([]TechnicalWriting, error) {
-	repoFilters := TechnicalWritingFilters{
-		UserID:    filters.UserID,
-		Type:      filters.Type,
-		Platform:  filters.Platform,
-		ProjectID: filters.ProjectID,
-		Featured:  filters.Featured,
-		Limit:     filters.Limit,
-		Offset:    filters.Offset,
-		OrderBy:   filters.OrderBy,
-		Order:     filters.Order,
-	}
+	repoFilters := TechnicalWritingFilters(filters)
 
 	return s.repo.ListTechnicalWritings(ctx, repoFilters)
 }

@@ -608,15 +608,7 @@ func (s *Service) DispatchSummary(ctx context.Context, summary Summary, opts Dis
 	}
 
 	if opts.SendWhatsApp {
-		// TODO: Re-enable when notifications worker is implemented
-		// env := notifications.ReportEnvelope{
-		// 	UserID:      summary.UserID.String(),
-		// 	TextMessage: message,
-		// 	Destination: opts.PhoneNumber,
-		// }
-		// if err := s.publisher.PublishWhatsAppReport(ctx, env); err != nil && s.logger != nil {
-		// 	s.logger.Error("reports: publish whatsapp failed", slog.Any("error", err))
-		// }
+		_ = opts.SendWhatsApp // TODO: Re-enable when notifications worker is implemented
 	}
 
 	return nil

@@ -135,23 +135,7 @@ func (h *handler) CreatePost(c *fiber.Ctx) error {
 		return response.Error(c, fiber.StatusBadRequest, ErrCodeInvalidPayload, nil)
 	}
 
-	post, err := h.service.CreatePost(c.Context(), userID, CreatePostRequest{
-		Title:           payload.Title,
-		Content:         payload.Content,
-		Excerpt:         payload.Excerpt,
-		Status:          payload.Status,
-		FeaturedImage:   payload.FeaturedImage,
-		MetaTitle:       payload.MetaTitle,
-		MetaDescription: payload.MetaDescription,
-		MetaKeywords:    payload.MetaKeywords,
-		OGTitle:         payload.OGTitle,
-		OGDescription:   payload.OGDescription,
-		OGImage:         payload.OGImage,
-		Featured:        payload.Featured,
-		SkillIDs:        payload.SkillIDs,
-		CategoryIDs:     payload.CategoryIDs,
-		TagNames:        payload.TagNames,
-	})
+	post, err := h.service.CreatePost(c.Context(), userID, CreatePostRequest(payload))
 	if err != nil {
 		return h.handleError(c, err)
 	}
@@ -346,7 +330,11 @@ func (h *handler) GetPostBySlug(c *fiber.Ctx) error {
 
 	// Increment views for published posts
 	if post.Status == PostStatusPublished {
-		go h.service.IncrementPostViews(c.Context(), post.ID)
+		go func() {
+			if err := h.service.IncrementPostViews(c.Context(), post.ID); err != nil {
+				h.logger.Error("failed to increment post views", slog.Any("error", err))
+			}
+		}()
 	}
 
 	return response.Success(c, fiber.StatusOK, toPostResponse(post))

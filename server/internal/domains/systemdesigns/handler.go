@@ -149,7 +149,7 @@ func (h *handler) CreateSystemDesign(c *fiber.Ctx) error {
 		}
 		if systemDesign.Reliability != "" {
 			sourceText["reliability"] = systemDesign.Reliability
-			fields = append(fields, "reliability")
+			_ = fields // TODO: Re-enable when translation service is implemented
 		}
 
 		// TODO: Re-enable when translation service is implemented
@@ -245,7 +245,7 @@ func (h *handler) UpdateSystemDesign(c *fiber.Ctx) error {
 		}
 		if payload.Reliability != nil && *payload.Reliability != "" {
 			sourceText["reliability"] = *payload.Reliability
-			fields = append(fields, "reliability")
+			_ = fields // TODO: Re-enable when translation service is implemented
 		}
 
 		// TODO: Re-enable when translation service is implemented
