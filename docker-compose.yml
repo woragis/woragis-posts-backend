@@ -1,7 +1,7 @@
 services:
   database:
     image: postgres:15-alpine
-    container_name: jobs-service-database
+    container_name: woragis-posts-database
     environment:
       POSTGRES_DB: jobs_service
       POSTGRES_PASSWORD: ${POSTGRES_PASSWORD:-password}
@@ -17,11 +17,11 @@ services:
       - postgres-data:/var/lib/postgresql/data
     restart: unless-stopped
     networks:
-      - jobs-service-network
+      - woragis-posts-network
 
   redis:
     image: redis:7-alpine
-    container_name: jobs-service-redis
+    container_name: woragis-posts-redis
     healthcheck:
       test: ["CMD", "redis-cli", "ping"]
       interval: 10s
@@ -33,11 +33,11 @@ services:
       - redis-data:/data
     restart: unless-stopped
     networks:
-      - jobs-service-network
+      - woragis-posts-network
 
   rabbitmq:
     image: rabbitmq:3.13-management-alpine
-    container_name: jobs-service-rabbitmq
+    container_name: woragis-posts-rabbitmq
     environment:
       RABBITMQ_DEFAULT_USER: ${RABBITMQ_USER:-woragis}
       RABBITMQ_DEFAULT_PASS: ${RABBITMQ_PASSWORD:-woragis}
@@ -54,13 +54,13 @@ services:
       - rabbitmq-data:/var/lib/rabbitmq
     restart: unless-stopped
     networks:
-      - jobs-service-network
+      - woragis-posts-network
 
   app:
     build:
       context: ./server
       dockerfile: Dockerfile
-    container_name: jobs-service-app
+    container_name: woragis-posts-app
     depends_on:
       database:
         condition: service_healthy
@@ -70,7 +70,7 @@ services:
         condition: service_healthy
     environment:
       APP_ENV: ${APP_ENV:-development}
-      APP_NAME: jobs-service
+      APP_NAME: posts-service
       APP_PORT: ${APP_PORT:-3000}
       APP_PUBLIC_URL: ${APP_PUBLIC_URL:-http://localhost:3001}
       AUTH_JWT_SECRET: ${AUTH_JWT_SECRET:-dev-secret-change-me}
@@ -92,7 +92,7 @@ services:
       SMTP_FROM: ${SMTP_FROM:-}
       SMTP_TLS: ${SMTP_TLS:-true}
       MONITORING_ENABLED: ${MONITORING_ENABLED:-true}
-      METRICS_NAMESPACE: jobs-service
+      METRICS_NAMESPACE: posts-service
       OTLP_ENDPOINT: ${OTLP_ENDPOINT:-http://jaeger:4318}
       JAEGER_ENDPOINT: ${JAEGER_ENDPOINT:-}
       CORS_ENABLED: ${CORS_ENABLED:-true}
@@ -114,7 +114,7 @@ services:
 
   ai-service:
     image: woragis/ai-service:1.1.0
-    container_name: jobs-service-ai-service
+    container_name: woragis-posts-ai-service
     depends_on:
       redis:
         condition: service_healthy
@@ -139,11 +139,11 @@ services:
       start_period: 10s
     restart: on-failure
     networks:
-      - jobs-service-network
+      - woragis-posts-network
 
   creative-service:
     image: woragis/creative-service:1.1.0
-    container_name: jobs-service-creative-service
+    container_name: woragis-posts-creative-service
     depends_on:
       redis:
         condition: service_healthy
@@ -181,7 +181,7 @@ services:
 
   email-worker:
     image: woragis/email-worker:1.1.0
-    container_name: jobs-service-email-worker
+    container_name: woragis-posts-email-worker
     depends_on:
       rabbitmq:
         condition: service_healthy
@@ -213,11 +213,11 @@ services:
       start_period: 10s
     restart: "no"
     networks:
-      - jobs-service-network
+      - woragis-posts-network
 
   prometheus:
     image: prom/prometheus:v2.54.1
-    container_name: jobs-service-prometheus
+    container_name: woragis-posts-prometheus
     volumes:
       - ./monitoring/prometheus-config.yml:/etc/prometheus/prometheus.yml:ro
       - ./monitoring/prometheus/alerts.yml:/etc/prometheus/alerts.yml:ro
@@ -239,11 +239,11 @@ services:
       timeout: 5s
       retries: 5
     networks:
-      - jobs-service-network
+      - woragis-posts-network
 
   loki:
     image: grafana/loki:2.9.2
-    container_name: jobs-service-loki
+    container_name: woragis-posts-loki
     ports:
       - "${LOKI_PORT:-3112}:3100"
     volumes:
@@ -260,11 +260,11 @@ services:
       timeout: 5s
       retries: 5
     networks:
-      - jobs-service-network
+      - woragis-posts-network
 
   promtail:
     image: grafana/promtail:2.9.2
-    container_name: jobs-service-promtail
+    container_name: woragis-posts-promtail
     volumes:
       - ./monitoring/promtail-config.yml:/etc/promtail/config.yml:ro
       - /var/lib/docker/containers:/var/lib/docker/containers:ro
@@ -280,7 +280,7 @@ services:
 
   jaeger:
     image: jaegertracing/all-in-one:1.57
-    container_name: jobs-service-jaeger
+    container_name: woragis-posts-jaeger
     environment:
       COLLECTOR_OTLP_ENABLED: "true"
       COLLECTOR_ZIPKIN_HOST_PORT: ":9411"
@@ -301,11 +301,11 @@ services:
       timeout: 5s
       retries: 5
     networks:
-      - jobs-service-network
+      - woragis-posts-network
 
   grafana:
     image: grafana/grafana:11.1.0
-    container_name: jobs-service-grafana
+    container_name: woragis-posts-grafana
     depends_on:
       loki:
         condition: service_healthy
@@ -339,7 +339,7 @@ volumes:
   prometheus-data:
 
 networks:
-  jobs-service-network:
+  woragis-posts-network:
     driver: bridge
   woragis-network:
     driver: bridge
