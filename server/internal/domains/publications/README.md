@@ -17,6 +17,7 @@ Publications is a separate domain that acts as a **publishing control system** a
 ### Entities
 
 #### Publication
+
 The main publication entity that represents a publishing plan for any content type.
 
 ```go
@@ -35,11 +36,13 @@ type Publication struct {
 ```
 
 **Status Transitions:**
+
 - `skeleton` → `draft` → `scheduled` → `published` → `archived`
 - `skeleton` → `draft` → `archived` (skip publishing)
 - `archived` → any state (restore from archive)
 
 #### PublicationPlatform
+
 Junction entity linking publications to specific platforms with publishing metadata.
 
 ```go
@@ -58,6 +61,7 @@ type PublicationPlatform struct {
 ```
 
 #### PublicationMedia
+
 Stores media evidence of publications (screenshots, archives, etc.)
 
 ```go
@@ -74,6 +78,7 @@ type PublicationMedia struct {
 ```
 
 #### Platform
+
 Registry of distribution platforms/channels.
 
 ```go
@@ -88,6 +93,7 @@ type Platform struct {
 ```
 
 **Default Platforms:**
+
 - LinkedIn
 - Twitter/X
 - Instagram
@@ -104,6 +110,7 @@ All endpoints require JWT authentication.
 ### Publication Management
 
 **Create Publication**
+
 ```
 POST /api/v1/publications
 Content-Type: application/json
@@ -117,16 +124,19 @@ Content-Type: application/json
 ```
 
 **Get Publication**
+
 ```
 GET /api/v1/publications/:id
 ```
 
 **List Publications**
+
 ```
 GET /api/v1/publications?limit=20&offset=0&status=scheduled&contentType=post&archived=false
 ```
 
 **Update Publication**
+
 ```
 PUT /api/v1/publications/:id
 Content-Type: application/json
@@ -140,6 +150,7 @@ Content-Type: application/json
 ```
 
 **Delete Publication**
+
 ```
 DELETE /api/v1/publications/:id
 ```
@@ -147,11 +158,13 @@ DELETE /api/v1/publications/:id
 ### Platform Management
 
 **List Platforms**
+
 ```
 GET /api/v1/publications/platforms
 ```
 
 **Create Platform**
+
 ```
 POST /api/v1/publications/platforms
 Content-Type: application/json
@@ -168,6 +181,7 @@ Content-Type: application/json
 ### Publishing Operations
 
 **Publish to Single Platform**
+
 ```
 POST /api/v1/publications/:publicationId/publish/:platformId
 Content-Type: application/json
@@ -182,21 +196,25 @@ Content-Type: application/json
 ```
 
 **Unpublish from Platform**
+
 ```
 DELETE /api/v1/publications/:publicationId/publish/:platformId
 ```
 
 **List Platforms for Publication**
+
 ```
 GET /api/v1/publications/:publicationId/publish
 ```
 
 **Retry Publish**
+
 ```
 POST /api/v1/publications/:publicationId/publish/:platformId/retry
 ```
 
 **Bulk Publish**
+
 ```
 POST /api/v1/publications/:publicationId/publish/bulk
 Content-Type: application/json
@@ -214,6 +232,7 @@ Content-Type: application/json
 ### Media Management
 
 **Upload Media**
+
 ```
 POST /api/v1/publications/:publicationId/media
 Content-Type: multipart/form-data
@@ -224,6 +243,7 @@ Content-Type: multipart/form-data
 ```
 
 **List Media**
+
 ```
 GET /api/v1/publications/:publicationId/media?platformId=uuid
 ```
@@ -252,6 +272,7 @@ The Publications domain supports all 8 content types:
 ## Use Cases
 
 ### 1. Multi-Platform Publishing Workflow
+
 ```
 User creates publication in "draft" state
     ↓
@@ -267,6 +288,7 @@ Publication remains active for future republishing to other platforms
 ```
 
 ### 2. Content Archive as Drafts
+
 ```
 User creates "skeleton" publication with just a title
     ↓
@@ -278,6 +300,7 @@ User publishes or archives without publishing
 ```
 
 ### 3. Bulk Multi-platform Campaign
+
 ```
 User creates publication for Case Study
     ↓
@@ -289,6 +312,7 @@ User can unpublish from one platform while keeping others active
 ```
 
 ### 4. Publishing Evidence & Audit Trail
+
 ```
 Each publication stores:
 - URLs where content was posted
@@ -324,6 +348,7 @@ skeleton ──→ draft ──────→ scheduled ──→ published
 ```
 
 **Key Rules:**
+
 - Can only move forward through states (mostly)
 - Can archive from any state
 - Can restore from archived back to skeleton/draft/scheduled
@@ -332,12 +357,14 @@ skeleton ──→ draft ──────→ scheduled ──→ published
 ## Database Schema
 
 ### Tables
+
 - `publications` - Main publication records
 - `publication_platforms` - Junction table for platform assignments
 - `publication_media` - Media/evidence records
 - `platforms` - Platform registry
 
 ### Indexes
+
 - `idx_publications_user_id_status` - Quick user filtering
 - `idx_publications_user_id_archived` - Archive querying
 - `idx_publications_content_id_type` - Content linkage
@@ -371,19 +398,19 @@ type Service interface {
     ListPublications(ctx, userID, filter) ([]*Publication, int64, error)
     UpdatePublication(ctx, userID, pubID, req) (*Publication, error)
     DeletePublication(ctx, userID, pubID) error
-    
+
     // Platform operations
     ListPlatforms(ctx) ([]*Platform, error)
     GetOrCreateDefaultPlatforms(ctx) ([]*Platform, error)
     CreatePlatform(ctx, req) (*Platform, error)
-    
+
     // Publishing
     PublishToplatform(ctx, userID, pubID, platformID, req) (*PublicationPlatform, error)
     UnpublishFromPlatform(ctx, userID, pubID, platformID) error
     ListPublicationPlatforms(ctx, userID, pubID) ([]*PublicationPlatform, error)
     RetryPublishToplatform(ctx, userID, pubID, platformID) (*PublicationPlatform, error)
     BulkPublish(ctx, userID, pubID, req) ([]*PublicationPlatform, error)
-    
+
     // Media
     UploadMedia(ctx, userID, pubID, platformID, mediaType, file, filename) (*PublicationMedia, error)
     ListPublicationMedia(ctx, userID, pubID) ([]*PublicationMedia, error)
@@ -405,6 +432,7 @@ type Service interface {
 ## Related Domains
 
 The Publications domain works with:
+
 - **Posts** - Blog post content
 - **Case Studies** - Project case study content
 - **Problem Solutions** - Solution content
@@ -417,11 +445,13 @@ The Publications domain works with:
 ## Testing
 
 Run tests:
+
 ```bash
 go test ./internal/domains/publications/...
 ```
 
 Run with coverage:
+
 ```bash
 go test -cover ./internal/domains/publications/...
 ```

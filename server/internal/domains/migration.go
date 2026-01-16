@@ -3,15 +3,15 @@ package posts
 import (
 	"gorm.io/gorm"
 
+	"woragis-posts-service/internal/domains/aimlintegrations"
+	"woragis-posts-service/internal/domains/casestudies"
+	"woragis-posts-service/internal/domains/impactmetrics"
 	"woragis-posts-service/internal/domains/posts"
 	"woragis-posts-service/internal/domains/problemsolutions"
-	"woragis-posts-service/internal/domains/impactmetrics"
-	"woragis-posts-service/internal/domains/technicalwritings"
-	"woragis-posts-service/internal/domains/casestudies"
-	"woragis-posts-service/internal/domains/systemdesigns"
-	"woragis-posts-service/internal/domains/reports"
-	"woragis-posts-service/internal/domains/aimlintegrations"
 	"woragis-posts-service/internal/domains/publications"
+	"woragis-posts-service/internal/domains/reports"
+	"woragis-posts-service/internal/domains/systemdesigns"
+	"woragis-posts-service/internal/domains/technicalwritings"
 )
 
 // MigratePostsTables runs database migrations for posts service

@@ -16,6 +16,7 @@ if err := posts.MigratePostsTables(db); err != nil {
 ```
 
 This creates:
+
 - `publications` table
 - `publication_platforms` table (junction)
 - `publication_media` table
@@ -122,14 +123,14 @@ Add API client:
 
 ```typescript
 // src/lib/api/publications/client.ts
-import { fetch } from '$app/utils';
+import { fetch } from '$app/utils'
 
 export const PublicationsAPI = {
   async create(req: CreatePublicationRequest) {
     return fetch('/api/v1/publications', {
       method: 'POST',
-      body: JSON.stringify(req)
-    });
+      body: JSON.stringify(req),
+    })
   },
 
   async list(filters: PublicationFilter) {
@@ -138,24 +139,31 @@ export const PublicationsAPI = {
       offset: filters.offset?.toString() || '0',
       ...(filters.status && { status: filters.status }),
       ...(filters.contentType && { contentType: filters.contentType }),
-    });
-    return fetch(`/api/v1/publications?${params}`);
+    })
+    return fetch(`/api/v1/publications?${params}`)
   },
 
-  async publish(publicationId: string, platformId: string, req: PublishRequest) {
-    return fetch(`/api/v1/publications/${publicationId}/publish/${platformId}`, {
-      method: 'POST',
-      body: JSON.stringify(req)
-    });
+  async publish(
+    publicationId: string,
+    platformId: string,
+    req: PublishRequest
+  ) {
+    return fetch(
+      `/api/v1/publications/${publicationId}/publish/${platformId}`,
+      {
+        method: 'POST',
+        body: JSON.stringify(req),
+      }
+    )
   },
 
   async uploadMedia(publicationId: string, formData: FormData) {
     return fetch(`/api/v1/publications/${publicationId}/media`, {
       method: 'POST',
-      body: formData
-    });
-  }
-};
+      body: formData,
+    })
+  },
+}
 ```
 
 Create pages:
@@ -198,6 +206,7 @@ Publications can link to Posts content:
 ### With All Other Domains
 
 Same pattern for:
+
 - `problem_solution`
 - `technical_writing`
 - `system_design`
@@ -214,6 +223,7 @@ User creates a bare publication with just title and outline as a brain-dump/note
 ### 2. Add Content
 
 User either:
+
 - Links to existing content via `contentId`
 - Writes outline for future content
 
@@ -224,6 +234,7 @@ User moves publication to "draft" when content is ready for publishing.
 ### 4. Multi-platform Publishing
 
 User publishes to multiple platforms:
+
 - LinkedIn for professional network
 - Twitter for quick share
 - Newsletter for subscribers
@@ -240,6 +251,7 @@ When done promoting, user archives publication to clean up active list.
 ## Error Scenarios
 
 ### Unauthorized Access
+
 ```json
 {
   "success": false,
@@ -251,6 +263,7 @@ When done promoting, user archives publication to clean up active list.
 ```
 
 ### Publication Not Found
+
 ```json
 {
   "success": false,
@@ -262,6 +275,7 @@ When done promoting, user archives publication to clean up active list.
 ```
 
 ### Invalid State Transition
+
 ```json
 {
   "success": false,
@@ -273,6 +287,7 @@ When done promoting, user archives publication to clean up active list.
 ```
 
 ### Already Published to Platform
+
 ```json
 {
   "success": false,
@@ -288,14 +303,14 @@ When done promoting, user archives publication to clean up active list.
 ### Queries
 
 List queries are indexed:
+
 - By `user_id` + `status` for quick filtering
 - By `content_id` + `content_type` for content linking
 - By `published_at` for timeline views
 
 ### Pagination
 
-Default limit: 20
-Maximum limit: 100
+Default limit: 20 Maximum limit: 100
 
 ```
 GET /api/v1/publications?limit=50&offset=100
@@ -340,6 +355,7 @@ GET /api/v1/publications?limit=50&offset=100
 ## Support
 
 For issues or questions:
+
 1. Check the Publications README.md for detailed API documentation
 2. Review error codes in errors.go
 3. Check existing tests in publications_test.go (when added)
