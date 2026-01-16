@@ -11,6 +11,7 @@ import (
 	"woragis-posts-service/internal/domains/systemdesigns"
 	"woragis-posts-service/internal/domains/reports"
 	"woragis-posts-service/internal/domains/aimlintegrations"
+	"woragis-posts-service/internal/domains/publications"
 )
 
 // MigratePostsTables runs database migrations for posts service
@@ -81,6 +82,16 @@ func MigratePostsTables(db *gorm.DB) error {
 	if err := db.AutoMigrate(
 		&aimlintegrations.AIMLIntegration{},
 	); err != nil {
+		return err
+	}
+
+	// Migrate publications tables
+	if err := publications.Migrate(db); err != nil {
+		return err
+	}
+
+	// Seed default platforms
+	if err := publications.SeedDefaultPlatforms(db); err != nil {
 		return err
 	}
 

@@ -19,10 +19,10 @@ import (
 	"woragis-posts-service/pkg/health"
 	applogger "woragis-posts-service/pkg/logger"
 	appmetrics "woragis-posts-service/pkg/metrics"
-	apptracing "woragis-posts-service/pkg/tracing"
 	appsecurity "woragis-posts-service/pkg/security"
 	apptimeout "woragis-posts-service/pkg/timeout"
-	
+	apptracing "woragis-posts-service/pkg/tracing"
+
 	postsdomain "woragis-posts-service/internal/domains"
 )
 

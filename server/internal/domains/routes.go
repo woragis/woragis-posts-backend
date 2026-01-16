@@ -15,6 +15,7 @@ import (
 	"woragis-posts-service/internal/domains/systemdesigns"
 	"woragis-posts-service/internal/domains/reports"
 	"woragis-posts-service/internal/domains/aimlintegrations"
+	"woragis-posts-service/internal/domains/publications"
 	"woragis-posts-service/pkg/authservice"
 	"woragis-posts-service/pkg/middleware"
 )
@@ -36,6 +37,7 @@ func SetupRoutes(api fiber.Router, db *gorm.DB, authServiceURL string, logger *s
 	systemDesignRepo := systemdesigns.NewGormRepository(db)
 	reportRepo := reports.NewGormRepository(db)
 	aimlIntegrationRepo := aimlintegrations.NewGormRepository(db)
+	publicationRepo := publications.NewGormRepository(db)
 
 	// Initialize services
 	postService := posts.NewService(postRepo, logger)
@@ -52,6 +54,7 @@ func SetupRoutes(api fiber.Router, db *gorm.DB, authServiceURL string, logger *s
 	var publisher reports.Publisher = nil
 	reportService := reports.NewService(reportRepo, ideasRepo, projectsRepo, financeRepo, chatsRepo, publisher, logger)
 	aimlIntegrationService := aimlintegrations.NewService(aimlIntegrationRepo, logger)
+	publicationService := publications.NewService(publicationRepo)
 
 	// Initialize handlers (simplified - without translation enricher for now)
 	postHandler := posts.NewHandler(postService, nil, nil, nil, logger) // enricher, translationService, creativeAssetsService
@@ -62,6 +65,7 @@ func SetupRoutes(api fiber.Router, db *gorm.DB, authServiceURL string, logger *s
 	systemDesignHandler := systemdesigns.NewHandler(systemDesignService, nil, nil, logger) // enricher, translationService
 	reportHandler := reports.NewHandler(reportService, logger)
 	aimlIntegrationHandler := aimlintegrations.NewHandler(aimlIntegrationService, nil, nil, logger) // enricher, translationService
+	publicationHandler := publications.NewHandler(publicationService, logger)
 
 	// Initialize subdomain handlers for posts
 	commentRepo := postcomments.NewGormRepository(db)
@@ -79,4 +83,5 @@ func SetupRoutes(api fiber.Router, db *gorm.DB, authServiceURL string, logger *s
 	systemdesigns.SetupRoutes(api.Group("/system-designs"), systemDesignHandler)
 	reports.SetupRoutes(api.Group("/reports"), reportHandler)
 	aimlintegrations.SetupRoutes(api.Group("/aiml-integrations"), aimlIntegrationHandler)
+	publications.SetupRoutes(api.Group("/publications"), publicationHandler)
 }
