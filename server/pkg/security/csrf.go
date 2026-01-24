@@ -45,7 +45,7 @@ func DefaultCSRFConfig(redisClient *redis.Client) CSRFConfig {
 		CookieName:   "csrf_token",
 		HeaderName:   "X-CSRF-Token",
 		ExemptRoutes: []string{"/healthz", "/metrics", "/api/v1/auth/login", "/api/v1/auth/register"},
-		ExemptMethods: []string{"GET", "HEAD", "OPTIONS"},
+		ExemptMethods: []string{"HEAD", "OPTIONS"},
 	}
 }
 

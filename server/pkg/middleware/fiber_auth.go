@@ -122,12 +122,19 @@ func GetUserIDFromFiberContext(c *fiber.Ctx) (uuid.UUID, error) {
 		return uuid.Nil, errors.New("user not authenticated")
 	}
 
-	id, ok := userID.(uuid.UUID)
-	if !ok {
+	// Accept both uuid.UUID and string values to support different auth middlewares
+	switch v := userID.(type) {
+	case uuid.UUID:
+		return v, nil
+	case string:
+		id, err := uuid.Parse(v)
+		if err != nil {
+			return uuid.Nil, errors.New("invalid user ID in context")
+		}
+		return id, nil
+	default:
 		return uuid.Nil, errors.New("invalid user ID in context")
 	}
-
-	return id, nil
 }
 
 // GetUserRoleFromFiberContext extracts user role from Fiber context

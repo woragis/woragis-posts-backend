@@ -3,9 +3,10 @@ package middleware
 import (
 	"strings"
 
-	"github.com/gofiber/fiber/v2"
 	"woragis-posts-service/pkg/authservice"
 	"woragis-posts-service/pkg/utils"
+
+	"github.com/gofiber/fiber/v2"
 )
 
 // AuthValidationConfig holds configuration for auth validation middleware
