@@ -35,27 +35,6 @@ services:
     networks:
       - woragis-posts-network
 
-  rabbitmq:
-    image: rabbitmq:3.13-management-alpine
-    container_name: woragis-posts-rabbitmq
-    environment:
-      RABBITMQ_DEFAULT_USER: ${RABBITMQ_USER:-woragis}
-      RABBITMQ_DEFAULT_PASS: ${RABBITMQ_PASSWORD:-woragis}
-      RABBITMQ_DEFAULT_VHOST: ${RABBITMQ_VHOST:-/}
-    healthcheck:
-      test: ["CMD", "rabbitmq-diagnostics", "ping"]
-      interval: 10s
-      timeout: 5s
-      retries: 5
-    ports:
-      - "${RABBITMQ_PORT:-5683}:5672"   # AMQP port
-      - "${RABBITMQ_MGMT_PORT:-15683}:15672" # Management UI
-    volumes:
-      - rabbitmq-data:/var/lib/rabbitmq
-    restart: unless-stopped
-    networks:
-      - woragis-posts-network
-
   app:
     build:
       context: ./server
@@ -65,8 +44,6 @@ services:
       database:
         condition: service_healthy
       redis:
-        condition: service_healthy
-      rabbitmq:
         condition: service_healthy
     environment:
       APP_ENV: ${APP_ENV:-development}
@@ -79,12 +56,6 @@ services:
       HASH_SALT: ${HASH_SALT:-}
       DATABASE_URL: postgres://${POSTGRES_USER:-woragis}:${POSTGRES_PASSWORD:-password}@database:5432/${POSTGRES_DB:-jobs_service}?sslmode=disable
       REDIS_URL: redis://redis:6379/0
-      RABBITMQ_URL: amqp://${RABBITMQ_USER:-woragis}:${RABBITMQ_PASSWORD:-woragis}@rabbitmq:5672/${RABBITMQ_VHOST:-/}
-      RABBITMQ_USER: ${RABBITMQ_USER:-woragis}
-      RABBITMQ_PASSWORD: ${RABBITMQ_PASSWORD:-woragis}
-      RABBITMQ_HOST: ${RABBITMQ_HOST:-rabbitmq}
-      RABBITMQ_PORT: ${RABBITMQ_PORT:-5671}
-      RABBITMQ_VHOST: ${RABBITMQ_VHOST:-/}
       SMTP_HOST: ${SMTP_HOST:-}
       SMTP_PORT: ${SMTP_PORT:-587}
       SMTP_USERNAME: ${SMTP_USERNAME:-}
@@ -182,17 +153,8 @@ services:
   email-worker:
     image: woragis/email-worker:1.1.0
     container_name: woragis-posts-email-worker
-    depends_on:
-      rabbitmq:
-        condition: service_healthy
     environment:
       APP_ENV: ${APP_ENV:-production}
-      RABBITMQ_URL: ${RABBITMQ_URL:-amqp://${RABBITMQ_USER:-woragis}:${RABBITMQ_PASSWORD:-woragis}@rabbitmq:5672/}
-      RABBITMQ_USER: ${RABBITMQ_USER:-woragis}
-      RABBITMQ_PASSWORD: ${RABBITMQ_PASSWORD:-woragis}
-      RABBITMQ_HOST: ${RABBITMQ_HOST:-rabbitmq}
-      RABBITMQ_PORT: ${RABBITMQ_PORT:-5671}
-      RABBITMQ_VHOST: ${RABBITMQ_VHOST:-/}
       EMAIL_QUEUE_NAME: ${EMAIL_QUEUE_NAME:-emails.queue}
       EMAIL_EXCHANGE: ${EMAIL_EXCHANGE:-jobs-service.notifications}
       EMAIL_ROUTING_KEY: ${EMAIL_ROUTING_KEY:-emails.send}
@@ -332,7 +294,6 @@ services:
 volumes:
   postgres-data:
   redis-data:
-  rabbitmq-data:
   grafana-data:
   loki-data:
   promtail-positions:
